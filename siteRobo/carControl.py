@@ -1,6 +1,7 @@
 import RPi.GPIO as gpio
 import time
 import pigpio
+import funcao_sonar3
 
 gpio.cleanup()  # Limpa a configuracao de todos os pinos
 gpio.setwarnings(False)

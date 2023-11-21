@@ -3,15 +3,17 @@ import time
 import pigpio
 import numpy as np
 import cv2
-
+import funcao_sonar3
 
 imagem = cv2.VideoCapture(0)
 
-modo = 0
+cones = 0
 
 meio = 0
 
 m = False
+
+d = 99
 
 gpio.cleanup()  # Limpa a configuracao de todos os pinos
 gpio.setwarnings(False)
@@ -40,15 +42,15 @@ pi = pigpio.pi()
 #pi = pigpio.pi('localhost', 8888)
 
 
-def liga_led():
+def liga_led():  #arrumar------------
     gpio.output(LED_PIN, gpio.HIGH)
     
 def desliga_led():
     gpio.output(LED_PIN, gpio.LOW)
 
-# FunÃ§Ãµes de controle dos motores
+
 def motor_forward():
-    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    gpio.cleanup() 
     gpio.setmode(gpio.BCM)
     gpio.setup(PWM_PIN_A, gpio.OUT)
     gpio.setup(IN1_PIN_A, gpio.OUT)
@@ -61,7 +63,7 @@ def motor_forward():
 
 
 def motor_backward():
-    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    gpio.cleanup() 
     gpio.setmode(gpio.BCM)
     gpio.setup(PWM_PIN_A, gpio.OUT)
     gpio.setup(IN1_PIN_A, gpio.OUT)
@@ -76,12 +78,9 @@ def motor_backward():
 def stop_motor():
     pwm = gpio.PWM(PWM_PIN_A, 1)
     pwm.stop()
-    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    gpio.cleanup() 
 
-#FunÃ§Ã£o para controlar o servo motor
 def set_servo_angle(angle):
-    #duty = (angle / 18) + 2
-    #pi.set_servo_pulsewidth(SERVO_PIN, duty)
     gpio.setup(13, gpio.OUT)
     servo = gpio.PWM(13, 100)
     servo.start(0)
@@ -99,8 +98,6 @@ def angle_to_pulsewidth(angle):
     print(pulsewidth)
     return pulsewidth
 
-import cv2
-import numpy as np
 
 def distancia(imageFrame,m):
     global meio
@@ -133,8 +130,8 @@ def distancia(imageFrame,m):
             dist.append(distancia)
             me.append(x)
     
-    cm = min(me)
-    return min(dist)
+    cm = min(me)    #ponto medio do cone
+    return min(dist)  #distancia do objeto para a camera - calibrar
 
 def baliza():
     set_servo_angle(11)
@@ -145,21 +142,30 @@ def baliza():
     time.sleep(1)
     set_servo_angle(10)
     motor_forward()
-        
 
+def curva90():
+    if s[1] < s[0]:
+        set_servo_angle(11)
+        time.sleep(3)
+    
+    else:
+        set_servo_angle(9)
+        time.sleep(3)
 
-# Exemplo de movimento do carrinho
 while True:
+    s = funcao_sonar3.sonar()
+
     _, imageFrame = imagem.read()
 
     d = distancia(imageFrame,m)
 
-    if 'sf' <= 5 and d <= 9: 
+    if s[0] <= 5 and d <= 9: 
         stop_motor()
         liga_led()    
         time.sleep(2)
         desliga_led()
         baliza()
+        d = 99
 
     else:
         motor_forward()
@@ -170,11 +176,20 @@ while True:
         else:
             set_servo_angle(10)
 
-    if "sl" <= 5:
+        if s[0] <= 50 and d == 99: 
+            curva90(s)
+
+
+    if ((s[1] - s[2])**2)**(1/2) < 2:
+        set_servo_angle(10)
+        motor_forward()
+
+    elif s[1] <= 5:
         set_servo_angle(11)
     
-    elif "sl" >= 20:
+    elif s[1] >= 20 or s[2] <= 5:
         set_servo_angle(9)
-    
+
     else:
         set_servo_angle(10)
+
