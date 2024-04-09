@@ -23,19 +23,19 @@ O projeto do Robô Tracking visa desenvolver um veiculo autônomo para competiç
    ```
 
 2. **Instalar Dependências**: Navegue até o diretório do projeto e instale as dependências utilizando o gerenciador de pacotes pipenv para instalar as dependencias e criar um env automaticamente.
-   ```
+   '''
    cd ../tracking_2024
    pipenv install 
-   ```
+   '''
 
-3. **Executar no env**: execute o comando.
+3. **Executar o env**: execute o comando.
    '''
    pipenv shell
    '''
 
 4. **Executar o Sistema**: Execute o sistema utilizando o comando apropriado para sua configuração. Certifique-se de ter configurado corretamente os dispositivos de entrada, como câmeras ou sensores.
    ```
-   python main.py
+   python3 main.py
    ```
 
 ## Contribuição

@@ -1,1 +1,1 @@
-import numpy as np
+print("essa é a main")
