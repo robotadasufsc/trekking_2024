@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0c8a696127b44d2ef923d5472f16dc9d4b01316b937809c963639cad3a73626d"
+            "sha256": "514f9848f81184d13caecd8f1b6af6b7123298de92cb110e93cab81d9c3fdce4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -16,19 +16,6 @@
         ]
     },
     "default": {
-        "bluerobotics-navigator": {
-            "hashes": [
-                "sha256:36b1e8f5222a83f3a703d19034379310c09dab0b444af58e1ff76892978a9bb3",
-                "sha256:45ab95996d79ec4b8d52d02d2a8385d12b7932a5a0926e0784c769a94ce4099e",
-                "sha256:6920fe753ca9bad0ba9a6b190ab8f50c6a7ca8f6baf87ddb7c2b560e0db8eedb",
-                "sha256:70104e2b639ca400deb68eeeb75c92a0f23392a81b84144b24c8d0ccc85a02f6",
-                "sha256:8bcfa8e56be1893a25f71443e3ce3780c6c0e49d2f053f445cbab4a0ff3e20c9",
-                "sha256:bcdf77d8df93302d408e96a6dd7b337108e100e1564228dd61decf21403f9172"
-            ],
-            "index": "pypi",
-            "markers": "python_version >= '3.7'",
-            "version": "==0.0.0"
-        },
         "contourpy": {
             "hashes": [
                 "sha256:00e5388f71c1a0610e6fe56b5c44ab7ba14165cdd6d695429c5cd94021e390b2",

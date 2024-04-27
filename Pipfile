@@ -5,11 +5,10 @@ name = "pypi"
 
 [packages]
 numpy = "*"
-opencv-python = "*"
-bluerobotics-navigator = "*"
 matplotlib = "*"
+opencv-python = "*"
 
 [dev-packages]
 
 [requires]
-       python_version = "3.11"
+python_version = "3.11"
