@@ -1,0 +1,9 @@
+para ativar venv
+
+    pip install pipenv
+    pipenv install
+  
+para fazer commit
+
+  git config --global user.email "robota.pcs@gmail.com"
+  git config --global user.name "Navigator"
