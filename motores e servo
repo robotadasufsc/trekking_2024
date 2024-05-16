@@ -1,43 +1,51 @@
+pip install bluerobotics_navigator
 
-
+import bluerobotics_navigator as navigator
 import RPi.GPIO as gpio
 import time
 import pigpio
 
+
+
 # Definir pinos dos motores
-PWM_PIN_A = 18  # Pino PWM para o motor A
-IN1_PIN_A = 23  # Pino IN1 para o motor A
-IN2_PIN_A = 24  # Pino IN2 para o motor A
-PWM_PIN_B = 25  # Pino PWM para o motor B
-IN1_PIN_B = 8   # Pino IN1 para o motor B
-IN2_PIN_B = 7   # Pino IN2 para o motor B
+PWM_PIN_M = PwmChannel.Ch2 # Pino PWM para o motor 
+IN1_PIN_M = 23  # Pino IN1 para o motor s
+IN2_PIN_M = 24  # Pino IN2 para o motor 
 
 # Definir pino do servo motor
-SERVO_PIN = 17  # Pino gpio para o servo motor
+SERVO_PIN = PwmChannel.Ch1 # Pino para o servo motor
+
+# Definir estado dos PWMs
+navigator.set_pwm_freq_hz(1000)
+navigator.set_pwm_enable(True)
+
+# Inicializar o Navigator
+navigator.init() 
 
 # Inicializar gpio
 gpio.setmode(gpio.BCM)
-gpio.setup(IN1_PIN_A, gpio.OUT)
-gpio.setup(IN2_PIN_A, gpio.OUT)
-gpio.setup(IN1_PIN_B, gpio.OUT)
-gpio.setup(IN2_PIN_B, gpio.OUT)
-gpio.setup(SERVO_PIN, gpio.OUT)
+gpio.setup(IN1_PIN_M, gpio.OUT)
+gpio.setup(IN2_PIN_M, gpio.OUT)
 
 # Inicializar pigpio para controle de servo
 pi = pigpio.pi()
+
+
 
 # Funções de controle dos motores
 def motor_forward(pin_pwm, pin_in1, pin_in2):
     gpio.output(pin_in1, gpio.HIGH)
     gpio.output(pin_in2, gpio.LOW)
-    pwm = gpio.PWM(pin_pwm, 100)
+    pwm = navigator.set_pwm_channel_value(pin_pwm, 100)
+    #pwm = navigator.set_pwm_channel_duty_cycle(pin_pwm, 100)
     pwm.start(50)
     return pwm
 
 def motor_backward(pin_pwm, pin_in1, pin_in2):
     gpio.output(pin_in1, gpio.LOW)
     gpio.output(pin_in2, gpio.HIGH)
-    pwm = gpio.PWM(pin_pwm, 100)
+    pwm = navigator.set_pwm_channel_value(pin_pwm, 100)
+    #pwm = navigator.set_pwm_channel_duty_cycle(pin_pwm, 100)
     pwm.start(50)
     return pwm
 
@@ -48,29 +56,30 @@ def stop_motor(pwm):
 def set_servo_angle(angle):
     duty = (angle / 18) + 2
     pi.set_servo_pulsewidth(SERVO_PIN, duty)
+    #navigator.set_pwm_channel_duty_cycle(SERVO_PIN, duty) # Teste
+
+
 
 # Exemplo de movimento do carrinho
 try:
-    pwm_motor_a = motor_forward(PWM_PIN_A, IN1_PIN_A, IN2_PIN_A)
-    pwm_motor_b = motor_forward(PWM_PIN_B, IN1_PIN_B, IN2_PIN_B)
+    pwm_motor = motor_forward(PWM_PIN_M, IN1_PIN_M, IN2_PIN_M)
     set_servo_angle(90)  # Posição central do servo
 
     time.sleep(2)  # Movimento para frente por 2 segundos
 
-    stop_motor(pwm_motor_a)
-    stop_motor(pwm_motor_b)
+    stop_motor(pwm_motor)
 
     time.sleep(1)  # Pausa de 1 segundo
 
-    pwm_motor_a = motor_backward(PWM_PIN_A, IN1_PIN_A, IN2_PIN_A)
+    pwm_motor = motor_backward(PWM_PIN_M, IN1_PIN_M, IN2_PIN_M)
 
     time.sleep(2)  # Movimento para trás por 2 segundos
 
-    stop_motor(pwm_motor_a)
-    stop_motor(pwm_motor_b)
+    stop_motor(pwm_motor)
+
 
 except KeyboardInterrupt:
-    stop_motor(pwm_motor_a)
-    stop_motor(pwm_motor_b)
+    stop_motor(pwm_motor)
     gpio.cleanup()
     pi.stop()
+    navigator.set_pwm_enable(False)
