@@ -6,23 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle</title>
     <link rel="stylesheet" href="/static/styles/controlestyle.css">
+    <script src="/static/scripts/controlescript.js" defer></script>
   </head>
-  <body>
+  <body oncontextmenu="return false;">
     <div id="header">
       <h1>robota</h1>
   	  <h2>Controle Remoto</h2>
     </div>
     <div id="controle">
       <div id="top">
-        <button id="arrows"><img src="/static/images/arrowup.svg"></button>
+        <form><button type = "button" id="arrows" onmousedown="move_forward_car()" onmouseup="stop_car()" ontouchstart="move_forward_car()" ontouchcancel="stop_car()"><img src="/static/images/arrowup.svg"></button></form>
       </div>
       <div id="middle">
-        <button id="arrows"><img src="/static/images/arrowleft.svg"></button>
-        <button id="arrows"><img src="/static/images/poweroff.svg"></button>
-        <button id="arrows"><img src="/static/images/arrowright.svg"></button>
+        <form><button type = "button" id="arrows" onclick="move_left_car()"><img src="/static/images/arrowleft.svg"></button></form>
+        <form><button type = "button" id="arrows" onclick="stop_car()"><img src="/static/images/poweroff.svg"></button></form>
+        <form><button type = "button" id="arrows" onclick="move_right_car()"><img src="/static/images/arrowright.svg"></button></form>
       </div>
       <div id="bottom">
-        <button id="arrows"><img src="/static/images/arrowdown.svg"></button>
+        <form><button type = "button" id="arrows" onmousedown="move_backward_car()" onmouseup="stop_car()" ontouchstart="move_backward_car()" ontouchcancel="stop_car()"><img src="/static/images/arrowdown.svg"></button></form>
       </div>
     </div>
     <div id="footer">
