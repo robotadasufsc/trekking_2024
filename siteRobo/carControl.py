@@ -1,3 +1,4 @@
+'''''
 import bluerobotics_navigator as navigator
 #import RPi.GPIO as gpio
 import time
@@ -16,6 +17,7 @@ navigator.set_pwm_enable(True)
 # Inicializar o Navigator
 navigator.init()
 def direction_servo(direction=0.105):
+    pass
     navigator.set_pwm_enable(True)
     if direction == 'direita':
         x = 0.15
@@ -27,9 +29,12 @@ def direction_servo(direction=0.105):
     else:
         x = direction
     navigator.set_pwm_channel_duty_cycle(SERVO_PIN, x)
-
+'''
+def start():
+    pass
 
 def stop(): 
+    pass
     navigator.set_pwm_enable(False)
     navigator.set_pwm_channel_duty_cycle(IN1_PIN_M, 0)
     navigator.set_pwm_channel_duty_cycle(IN2_PIN_M, 0)
@@ -37,20 +42,24 @@ def stop():
     direction_servo('reto')
     return {'result': 'success'}
 def move_forward(): 
+    pass
     navigator.set_pwm_channel_duty_cycle(IN1_PIN_M, 0)
     navigator.set_pwm_channel_duty_cycle(IN2_PIN_M, 1)
     navigator.set_pwm_channel_duty_cycle(PWM_PIN_M, 1)
     navigator.set_pwm_enable(True)
     return {'result': 'success'}
 def move_backward(): 
+    pass
     navigator.set_pwm_channel_duty_cycle(IN1_PIN_M, 1)
     navigator.set_pwm_channel_duty_cycle(IN2_PIN_M, 0)
     navigator.set_pwm_channel_duty_cycle(PWM_PIN_M, 1)
     navigator.set_pwm_enable(True)
     return {'result': 'success'}
 def move_left(): 
+    pass
     direction_servo('esquerda')
     return {'result': 'success'}
 def move_right(): 
+    pass
     direction_servo('direita')
     return {'result': 'success'}

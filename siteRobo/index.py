@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template
+from carControl import start
 from carControl import stop
 from carControl import move_forward
 from carControl import move_backward
@@ -20,6 +21,11 @@ def power():
 @app.route('/mapa/')
 def mapa():
     return render_template('mapa.html')
+
+@app.route('/start-car') 
+def startCar(): 
+    return start()
+
 
 @app.route('/stop-car') 
 def stopCar(): 
