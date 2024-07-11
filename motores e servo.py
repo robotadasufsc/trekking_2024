@@ -97,7 +97,7 @@ def angle_to_pulsewidth(angle):
 # Exemplo de movimento do carrinho
 try:
     while True:
-        #pwm_motor_a = motor_backward(PWM_PIN_A, IN1_PIN_A, IN2_PIN_A)
+        pwm_motor_a = motor_backward(PWM_PIN_A, IN1_PIN_A, IN2_PIN_A)
         #pulso = angle_to_pulsewidth(90)
         #set_servo_angle(3)  # PosiÃ§Ã£o central do servo
         liga_led()

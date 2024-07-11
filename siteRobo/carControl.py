@@ -24,38 +24,50 @@ gpio.setup(IN2_PIN_A, gpio.OUT)
 gpio.setup(SERVO_PIN, gpio.OUT)
 gpio.setup(LED_PIN, gpio.OUT)
 
+
+
 # Inicializar pigpio para controle de servo
 pi = pigpio.pi()
 #pi = pigpio.pi('localhost', 8888)
-pwm = ''
+pwm = gpio.PWM(PWM_PIN_A, 1)
+
+
+def liga_led():
+    gpio.output(LED_PIN, gpio.HIGH)
+    
+def desliga_led():
+    gpio.output(LED_PIN, gpio.LOW)
 
 def direction_servo(direction=0.105):
     pass
 
 def start():
-    pass
+        move_forward()
+        liga_led()
+        time.set(10)
+        desliga_led
+        #pulso = angle_to_pulsewidth(90)
+        #set_servo_angle(3)  # PosiÃ§Ã£o central do servo
+        # liga_led()  # Movimento para frente por 2 segundos
+        # desliga_led()
+        return {'resupip installlt': 'success'}
 
-def stop(): 
-    pwm.stop()
+def stop():
+    pwm.stop() 
     print("pos stop1")
     gpio.cleanup()
     return {'result': 'success'}
 
 def move_forward(): 
     gpio.cleanup()  # Limpa a configuracao de todos os pinos
-    print('limpa config')
     gpio.setmode(gpio.BCM)
     gpio.setup(PWM_PIN_A, gpio.OUT)
     gpio.setup(IN1_PIN_A, gpio.OUT)
     gpio.setup(IN2_PIN_A, gpio.OUT)
     gpio.setup(PWM_PIN_A, gpio.OUT)
-    print("setup frente ok")
     gpio.output(IN1_PIN_A, gpio.HIGH)
     gpio.output(IN2_PIN_A, gpio.LOW)
-    print('portas frente ok')
-    pwm = gpio.PWM(PWM_PIN_A, 1)
     pwm.start(100)
-    print('setou pwm')
     return {'result': 'success'}
 def move_backward(): 
     gpio.cleanup()  # Limpa a configuracao de todos os pinos
@@ -66,7 +78,7 @@ def move_backward():
     gpio.setup(PWM_PIN_A, gpio.OUT)
     gpio.output(IN1_PIN_A, gpio.LOW)
     gpio.output(IN2_PIN_A, gpio.HIGH)
-    pwm = gpio.PWM(PWM_PIN_A, 1)
+    print("funcionou")
     pwm.start(100)
     return {'result': 'success'}
 def move_left(): 
