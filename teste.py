@@ -32,10 +32,16 @@ pi = pigpio.pi()
 pwm = gpio.PWM(PWM_PIN_A, 1)
 
 
-def liga_led():
+def liga_led(): 
+
+    gpio.setup(LED_PIN, gpio.OUT)
+    gpio.setmode( gpio.BCM)
     gpio.output(LED_PIN, gpio.HIGH)
     
 def desliga_led():
+    
+    gpio.setup(LED_PIN, gpio.OUT)
+    gpio.setmode( gpio.BCM)  
     gpio.output(LED_PIN, gpio.LOW)
 
 def direction_servo(direction=0.105):
@@ -95,10 +101,10 @@ def move_right():
 
 while True:
     move_forward()
-    time.sleep(1)
-    stop()
-    time.sleep(1)
-    move_backward()
-    time.sleep(1)
+    
+
+    time.sleep(20)
+    liga_led()
+    time.sleep(5)
     stop()
     time.sleep(1)

@@ -33,63 +33,33 @@ pi = pigpio.pi()
 pwm = gpio.PWM(PWM_PIN_A, 1)
 
 
-def liga_led():
+def liga_led(): 
+
+    gpio.setup(LED_PIN, gpio.OUT)
+    gpio.setmode(gpio.BCM)
     gpio.output(LED_PIN, gpio.HIGH)
     
 def desliga_led():
+    
+    gpio.setup(LED_PIN, gpio.OUT)
+    gpio.setmode(gpio.BCM)  
     gpio.output(LED_PIN, gpio.LOW)
 
 def direction_servo(direction=0.105):
     pass
 
 def start():
-<<<<<<< HEAD
-        move_forward()
-        liga_led()
-        time.set(10)
-        desliga_led
-        #pulso = angle_to_pulsewidth(90)
-        #set_servo_angle(3)  # PosiÃ§Ã£o central do servo
-        # liga_led()  # Movimento para frente por 2 segundos
-        # desliga_led()
-        return {'resupip installlt': 'success'}
+    move_forward()
+    time.sleep(23)
+    stop()
+    liga_led()
+    time.sleep(3)
+    desliga_led()
+    return {'resupip installlt': 'success'}
 
 def stop():
     pwm.stop() 
-=======
-    pass
-    '''
-    try:
-        while True:
-            #pwm_motor_a = motor_backward(PWM_PIN_A, IN1_PIN_A, IN2_PIN_A)
-            #pulso = angle_to_pulsewidth(90)
-            #set_servo_angle(3)  # PosiÃ§Ã£o central do servo
-            # liga_led()
-            # time.sleep(2)  # Movimento para frente por 2 segundos
-            # desliga_led()
-            #stop_motor(pwm_motor_a)
-
-            
-
-            # time.sleep(1)  # Pausa de 1 segundo
-
-            #pwm_motor_a = motor_forward(PWM_PIN_A, IN1_PIN_A, IN2_PIN_A)
-
-            # time.sleep(2)  # Movimento para trÃ¡s por 2 segundos
-
-            #stop_motor(pwm_motor_a)
-    except KeyboardInterrupt:
-        stop_motor(pwm_motor_a)
-        stop_motor(pwm_motor_b)
-        gpio.cleanup()
-        pi.stop()
-'''
-def stop():
-    if pwm != '':
-        pwm.stop()
->>>>>>> eafb69a (gon)
     print("pos stop1")
-    gpio.cleanup()
     return {'result': 'success'}
 
 def move_forward(): 

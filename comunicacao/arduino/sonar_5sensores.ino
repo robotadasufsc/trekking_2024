@@ -24,7 +24,7 @@ void loop() {
   //Serial.println(" cm");
 
   //Serial.print("Distance from sensor 2: ");
-  Serial.println(distance2);
+  Serial.println(0);
   //Serial.println(" cm");
 
   Serial.println(0);
