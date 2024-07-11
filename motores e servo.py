@@ -11,8 +11,6 @@ IN1_PIN_A = 27  # Pino IN1 para o motor A
 IN2_PIN_A = 22  # Pino IN2 para o motor A
 LED_PIN = 14
 
-
-
 # Definir pino do servo motor
 SERVO_PIN = 13  # Pino gpio para o servo motor
 
@@ -25,9 +23,9 @@ gpio.setup(SERVO_PIN, gpio.OUT)
 gpio.setup(LED_PIN, gpio.OUT)
 
 # Inicializar pigpio para controle de servo
-pi = pigpio.pi()
+#pi = pigpio.pi()
 #pi = pigpio.pi('localhost', 8888)
-
+pwm = gpio.PWM(PWM_PIN_A, 1)
 
 def liga_led():
     gpio.output(LED_PIN, gpio.HIGH)
@@ -69,55 +67,60 @@ def motor_backward(pin_pwm, pin_in1, pin_in2):
 
 def stop_motor(pwm):
     pwm.stop()
-    print("pos stop1")
     gpio.cleanup()  # Limpa a configuracao de todos os pinos
-    print("pos stop2")
+
 
 #FunÃ§Ã£o para controlar o servo motor
-def set_servo_angle(angle):
+def set_servo_angle(duty):
+    gpio.cleanup()  # Limpa a configuracao de todos os pinos
     #duty = (angle / 18) + 2
     #pi.set_servo_pulsewidth(SERVO_PIN, duty)
-    gpio.setup(13, gpio.OUT)
-    servo = gpio.PWM(13, 100)
-    servo.start(0)
-    servo.ChangeDutyCycle(angle)
-    
-    
-def angle_to_pulsewidth(angle):
-    PULSE_WIDTH_MIN = 500
-    PULSE_WIDTH_MAX = 2500
-    if angle < 0:
-        angle = 0
-    elif angle > 180:
-        angle = 180
-    pulsewidth = PULSE_WIDTH_MIN + (PULSE_WIDTH_MAX - PULSE_WIDTH_MIN) * (angle / 180.0)
-    print(pulsewidth)
-    return pulsewidth
+    gpio.setmode(gpio.BCM)
+    gpio.setup(SERVO_PIN, gpio.OUT)
+
+    servo = gpio.PWM(13,50)
+    servo.start(0)   
+    servo.ChangeDutyCycle(duty)  
+
 
 # Exemplo de movimento do carrinho
 try:
     while True:
-        pwm_motor_a = motor_backward(PWM_PIN_A, IN1_PIN_A, IN2_PIN_A)
+        
+        #pwm_motor_a = motor_backward(PWM_PIN_A, IN1_PIN_A, IN2_PIN_A)
         #pulso = angle_to_pulsewidth(90)
-        #set_servo_angle(3)  # PosiÃ§Ã£o central do servo
-        liga_led()
-        time.sleep(2)  # Movimento para frente por 2 segundos
-        desliga_led()
-        #stop_motor(pwm_motor_a)
+        stop_motor(pwm)
+
+
+
+
+
+
+
+
+
+        break
+        set_servo_angle(9)  # PosiÃ§Ã£o central do servo
+        time.sleep(1)
+        set_servo_angle(11)
+        time.sleep(1)
+        #liga_led()
+        #time.sleep(2)  # Movimento para frente por 2 segundos
+        #desliga_led()
+        #stop_motor(pwm)
 
         
 
-        time.sleep(1)  # Pausa de 1 segundo
+        #time.sleep(1)  # Pausa de 1 segundo
 
         #pwm_motor_a = motor_forward(PWM_PIN_A, IN1_PIN_A, IN2_PIN_A)
 
-        time.sleep(2)  # Movimento para trÃ¡s por 2 segundos
+        #time.sleep(2)  # Movimento para trÃ¡s por 2 segundos
 
         #stop_motor(pwm_motor_a)
         
 
 except KeyboardInterrupt:
-    stop_motor(pwm_motor_a)
-    stop_motor(pwm_motor_b)
+    stop_motor(pwm)
     gpio.cleanup()
     pi.stop()

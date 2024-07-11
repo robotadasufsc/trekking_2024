@@ -1,38 +1,104 @@
-import numpy as np
+import RPi.GPIO as gpio
+import time
+import pigpio
 
-# Criando duas matrizes aleatórias
-A = np.random.rand(3, 3)
-B = np.random.rand(3, 3)
+gpio.cleanup()  # Limpa a configuracao de todos os pinos
+gpio.setwarnings(False)
 
-# Imprimindo as matrizes
-print("Matriz A:")
-print(A)
-print("\nMatriz B:")
-print(B)
+# Definir pinos dos motores
+PWM_PIN_A = 12  # Pino PWM para o motor A
+IN1_PIN_A = 27  # Pino IN1 para o motor A
+IN2_PIN_A = 22  # Pino IN2 para o motor A
+LED_PIN = 14
 
-# Adicionando as matrizes
-soma = A + B
-print("\nSoma das matrizes A e B:")
-print(soma)
 
-# Multiplicando as matrizes
-produto = np.dot(A, B)
-print("\nProduto das matrizes A e B:")
-print(produto)
 
-# Calculando a transposta de uma matriz
-transposta_A = np.transpose(A)
-print("\nTransposta da matriz A:")
-print(transposta_A)
+# Definir pino do servo motor
+SERVO_PIN = 13  # Pino gpio para o servo motor
 
-# Calculando a inversa de uma matriz
-try:
-    inversa_A = np.linalg.inv(A)
-    print("\nInversa da matriz A:")
-    print(inversa_A)
-except np.linalg.LinAlgError:
-    print("\nA matriz A é singular e não possui inversa.")
+# Inicializar gpio
+gpio.setmode(gpio.BCM)
+gpio.setup(PWM_PIN_A, gpio.OUT)
+gpio.setup(IN1_PIN_A, gpio.OUT)
+gpio.setup(IN2_PIN_A, gpio.OUT)
+gpio.setup(SERVO_PIN, gpio.OUT)
+gpio.setup(LED_PIN, gpio.OUT)
 
-# Calculando o determinante de uma matriz
-determinante_A = np.linalg.det(A)
-print("\nDeterminante da matriz A:", determinante_A)
+
+
+# Inicializar pigpio para controle de servo
+pi = pigpio.pi()
+#pi = pigpio.pi('localhost', 8888)
+pwm = gpio.PWM(PWM_PIN_A, 1)
+
+
+def liga_led():
+    gpio.output(LED_PIN, gpio.HIGH)
+    
+def desliga_led():
+    gpio.output(LED_PIN, gpio.LOW)
+
+def direction_servo(direction=0.105):
+    pass
+
+def start():
+        move_forward()
+        liga_led()
+        time.set(10)
+        desliga_led
+        #pulso = angle_to_pulsewidth(90)
+        #set_servo_angle(3)  # PosiÃ§Ã£o central do servo
+        # liga_led()  # Movimento para frente por 2 segundos
+        # desliga_led()
+        return {'resupip installlt': 'success'}
+
+def stop():
+    pwm.stop() 
+    print("pos stop1")
+    gpio.cleanup()
+    return {'result': 'success'}
+
+def move_forward(): 
+    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    gpio.setmode(gpio.BCM)
+    gpio.setup(PWM_PIN_A, gpio.OUT)
+    gpio.setup(IN1_PIN_A, gpio.OUT)
+    gpio.setup(IN2_PIN_A, gpio.OUT)
+    gpio.setup(PWM_PIN_A, gpio.OUT)
+    gpio.output(IN1_PIN_A, gpio.HIGH)
+    gpio.output(IN2_PIN_A, gpio.LOW)
+    pwm.start(100)
+    return {'result': 'success'}
+def move_backward(): 
+    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    gpio.setmode(gpio.BCM)
+    gpio.setup(PWM_PIN_A, gpio.OUT)
+    gpio.setup(IN1_PIN_A, gpio.OUT)
+    gpio.setup(IN2_PIN_A, gpio.OUT)
+    gpio.setup(PWM_PIN_A, gpio.OUT)
+    gpio.output(IN1_PIN_A, gpio.LOW)
+    gpio.output(IN2_PIN_A, gpio.HIGH)
+    print("funcionou")
+    pwm.start(100)
+    return {'result': 'success'}
+def move_left(): 
+    pass
+    direction_servo('esquerda')
+    return {'result': 'success'}
+def move_right(): 
+    pass
+    direction_servo('direita')
+    return {'result': 'success'}
+
+
+
+
+while True:
+    move_forward()
+    time.sleep(1)
+    stop()
+    time.sleep(1)
+    move_backward()
+    time.sleep(1)
+    stop()
+    time.sleep(1)
