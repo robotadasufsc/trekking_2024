@@ -11,6 +11,8 @@ modo = 0
 
 meio = 0
 
+m = False
+
 gpio.cleanup()  # Limpa a configuracao de todos os pinos
 gpio.setwarnings(False)
 
@@ -97,7 +99,10 @@ def angle_to_pulsewidth(angle):
     print(pulsewidth)
     return pulsewidth
 
-def distancia(imageFrame):
+import cv2
+import numpy as np
+
+def distancia(imageFrame,m):
     global meio
     global cm
     hsvFrame = cv2.cvtColor(imageFrame, cv2.COLOR_BGR2HSV)
@@ -107,36 +112,29 @@ def distancia(imageFrame):
     if not m:
         m = True
         altura, largura, _ = imageFrame.shape
-        meio = (int(largura/2),int(altura/2))
+        meio = (int(largura/2), int(altura/2))
 
-    # Definindo a faixa de cor vermelha
-    red_lower = np.array([0, 120, 70], np.uint8)
-    red_upper = np.array([10, 255, 255], np.uint8)
-    red_mask1 = cv2.inRange(hsvFrame, red_lower, red_upper)
-
-    red_lower = np.array([170, 120, 70], np.uint8)
-    red_upper = np.array([180, 255, 255], np.uint8)
-    red_mask2 = cv2.inRange(hsvFrame, red_lower, red_upper)
-
-    red_mask = red_mask1 + red_mask2
+    # Definindo a faixa de cor laranja
+    orange_lower = np.array([5, 100, 100], np.uint8)
+    orange_upper = np.array([15, 255, 255], np.uint8)
+    orange_mask = cv2.inRange(hsvFrame, orange_lower, orange_upper)
 
     # Aplicando operações morfológicas
     kernel = np.ones((5, 5), "uint8")
-    red_mask = cv2.dilate(red_mask, kernel)
+    orange_mask = cv2.dilate(orange_mask, kernel)
 
-    contours, _ = cv2.findContours(red_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(orange_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     for contour in contours:
         area = cv2.contourArea(contour)
         if area > 500:
             x, y, w, h = cv2.boundingRect(contour)
-            altura_objeto = h
             distancia = ((2.2 * 14) / h)
             dist.append(distancia)
             me.append(x)
-            print(f"Altura do objeto: {altura_objeto}, Distância: {distancia}")
+    
     cm = min(me)
-    return min(distancia)
+    return min(dist)
 
 def baliza():
     set_servo_angle(11)
@@ -154,7 +152,7 @@ def baliza():
 while True:
     _, imageFrame = imagem.read()
 
-    d = distancia(imageFrame)
+    d = distancia(imageFrame,m)
 
     if 'sf' <= 5 and d <= 9: 
         stop_motor()
@@ -165,9 +163,9 @@ while True:
 
     else:
         motor_forward()
-        if (meio-cf) > 20:
+        if (meio-cm) > 20:
             set_servo_angle(11)
-        elif (meio-cf) < 20:
+        elif (meio-cm) < 20:
             set_servo_angle(9)
         else:
             set_servo_angle(10)
