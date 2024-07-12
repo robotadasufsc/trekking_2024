@@ -1,7 +1,0 @@
-print("essa é a main")
-print("essa é a main")
-print("essa é a main")
-print("essa é a main")
-print("essa é a main")
-print("essa não é a main")
-print("essa é a main")
