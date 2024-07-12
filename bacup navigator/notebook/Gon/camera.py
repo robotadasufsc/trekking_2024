@@ -43,7 +43,7 @@ while True:
             print(distancia)
 
     # Exibindo o resultado
-    #cv2.imshow("Vermelho detectado", imageFrame)
+    cv2.imshow("Vermelho detectado", imageFrame)
 
     # Terminando o programa
     if cv2.waitKey(10) & 0xFF == ord('q'):

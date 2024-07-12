@@ -1,15 +1,15 @@
-import comunicacao.python.funcao_sonar3 as funcao_sonar3
+import funcao_sonar3 as funcao_sonar3
 
-porta = 'COM7'
+porta = '/dev/ttyACM0'
 freq = 9600
 
 ser = funcao_sonar3.configurar_porta(porta, freq)
 
 
 while True:
-   array = funcao_sonar3.dados(ser)
-   #valor  = funcao_sonar3.sonar(ser)
-   print(array)
+   #array = funcao_sonar3.dados(ser)
+   valor  = funcao_sonar3.sonar(ser)
+   print(valor)
    print('')
 
 

@@ -14,6 +14,7 @@ def sonar(ser):
         if ser.in_waiting > 0:
             k = k+1
             line = ser.readline().decode('utf-8', errors='ignore').rstrip()
+            line = int(line)
             valores[k-1] = line    
             if k == 5:
                 return valores
