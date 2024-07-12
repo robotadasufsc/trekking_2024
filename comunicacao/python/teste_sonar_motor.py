@@ -37,10 +37,11 @@ def move_forward():
     gpio.output(IN2_PIN_A, gpio.LOW)
     pwm.start(100)
 
-def liga_led():  #arrumar------------
+def liga_led():
     gpio.setmode(gpio.BCM)
     gpio.setup(LED_PIN, gpio.OUT)
     gpio.output(LED_PIN, gpio.HIGH)
+
     
 def desliga_led():
     gpio.setmode(gpio.BCM)
@@ -50,17 +51,31 @@ def desliga_led():
 def stop_motor():
     pwm.stop()
 
+def move_backward(): 
+    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    gpio.setmode(gpio.BCM)
+    gpio.setup(PWM_PIN_A, gpio.OUT)
+    gpio.setup(IN1_PIN_A, gpio.OUT)
+    gpio.setup(IN2_PIN_A, gpio.OUT)
+    gpio.setup(PWM_PIN_A, gpio.OUT)
+    gpio.output(IN1_PIN_A, gpio.LOW)
+    gpio.output(IN2_PIN_A, gpio.HIGH)
+    pwm.start(100)
 
 
 move_forward()
-
+#stop_motor()
 while True:
     valor = funcao_sonar3.sonar(ser)
     print("frente",valor[1])
     print("lado",valor[0])
-    if valor[1] < 20:
-        liga_led()
+    if 3 < valor[1] < 20:
+        
+        move_backward()
+        liga_led()  #precisa estar no meio
         stop_motor()
+        
         time.sleep(3)
         desliga_led()
+        print("cabo")
         break
