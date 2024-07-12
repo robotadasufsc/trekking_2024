@@ -2,7 +2,7 @@ import RPi.GPIO as gpio
 import time
 import pigpio
 import funcao_sonar3
-
+'''
 gpio.cleanup()  # Limpa a configuracao de todos os pinos
 gpio.setwarnings(False)
 
@@ -31,9 +31,10 @@ gpio.setup(LED_PIN, gpio.OUT)
 pi = pigpio.pi()
 #pi = pigpio.pi('localhost', 8888)
 pwm = gpio.PWM(PWM_PIN_A, 1)
-
+'''
 
 def liga_led(): 
+
 
     gpio.setup(LED_PIN, gpio.OUT)
     gpio.setmode(gpio.BCM)
@@ -49,6 +50,7 @@ def direction_servo(direction=0.105):
     pass
 
 def start():
+    pass
     move_forward()
     time.sleep(23)
     stop()
@@ -58,11 +60,12 @@ def start():
     return {'resupip installlt': 'success'}
 
 def stop():
+    pass
     pwm.stop() 
-    print("pos stop1")
     return {'result': 'success'}
 
 def move_forward(): 
+    pass
     gpio.cleanup()  # Limpa a configuracao de todos os pinos
     gpio.setmode(gpio.BCM)
     gpio.setup(PWM_PIN_A, gpio.OUT)
@@ -73,7 +76,8 @@ def move_forward():
     gpio.output(IN2_PIN_A, gpio.LOW)
     pwm.start(100)
     return {'result': 'success'}
-def move_backward(): 
+def move_backward():
+    pass 
     gpio.cleanup()  # Limpa a configuracao de todos os pinos
     gpio.setmode(gpio.BCM)
     gpio.setup(PWM_PIN_A, gpio.OUT)
