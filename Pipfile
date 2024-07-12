@@ -10,6 +10,7 @@ opencv-python = "*"
 "rpi.gpio" = "*"
 flask = "*"
 pigpio = "*"
+serial = "*"
 
 [dev-packages]
 
