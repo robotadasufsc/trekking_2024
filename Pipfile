@@ -9,6 +9,7 @@ matplotlib = "*"
 opencv-python = "*"
 "rpi.gpio" = "*"
 flask = "*"
+pigpio = "*"
 
 [dev-packages]
 
