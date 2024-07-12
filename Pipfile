@@ -5,11 +5,12 @@ name = "pypi"
 
 [packages]
 numpy = "*"
-matpltotlib = "*"
+matplotlib = "*"
 opencv-python = "*"
-bluerobotics-navigator = "*"
+"rpi.gpio" = "*"
+flask = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.11"
+python_version = "*"
