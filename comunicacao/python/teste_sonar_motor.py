@@ -19,7 +19,6 @@ def init():
     gpio.setup(PWM_PIN_A, gpio.OUT)
     gpio.setup(IN1_PIN_A, gpio.OUT)
     gpio.setup(IN2_PIN_A, gpio.OUT)
-    gpio.setup(LED_PIN, gpio.OUT)
     gpio.setup(SERVO_PIN, gpio.OUT)
     gpio.setup(VCC, gpio.OUT)
 
@@ -39,15 +38,17 @@ def move_forward():
     #gpio.cleanup()  # Limpa a configuracao de todos os pinos
 
 def liga_led():
-    init()
+    gpio.setmode(gpio.BCM)
+    gpio.setup(LED_PIN, gpio.OUT)
     gpio.output(LED_PIN, gpio.HIGH)
-    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    #gpio.cleanup()  # Limpa a configuracao de todos os pinos
 
     
 def desliga_led():
-    init()
+    gpio.setmode(gpio.BCM)
+    gpio.setup(LED_PIN, gpio.OUT)
     gpio.output(LED_PIN, gpio.LOW)
-    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    #gpio.cleanup()  # Limpa a configuracao de todos os pinos
 
 def stop_motor():
     pwm.stop()
@@ -58,35 +59,36 @@ def move_backward():
     gpio.output(IN1_PIN_A, gpio.LOW)
     gpio.output(IN2_PIN_A, gpio.HIGH)
     pwm.start(100)
-    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    #gpio.cleanup()  # Limpa a configuracao de todos os pinos
 
 def lt(): # Gira para esquerda
     init()
     servo = gpio.PWM(SERVO_PIN,50)
     servo.start(0)   
     servo.ChangeDutyCycle(9)  
-    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    #gpio.cleanup()  # Limpa a configuracao de todos os pinos
 
 def rt(): # Gira para direita
     init()
     servo = gpio.PWM(SERVO_PIN,50)
     servo.start(0)   
     servo.ChangeDutyCycle(11)  
-    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    #gpio.cleanup()  # Limpa a configuracao de todos os pinos
 
 def mid(): # Gira servo para o meio
     init()
     servo = gpio.PWM(SERVO_PIN,50)
     servo.start(0)   
     servo.ChangeDutyCycle(10)  
-    gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    #gpio.cleanup()  # Limpa a configuracao de todos os pinos
 
 
 
-move_forward()
-time.sleep(3)
-#liga_led()
+move_backward()
 time.sleep(1)
+liga_led()
+time.sleep(1)
+mid()
 stop_motor()
 time.sleep(1)
 rt()
