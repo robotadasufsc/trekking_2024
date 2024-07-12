@@ -5,7 +5,7 @@ import numpy as np
 
 navigator.init()
 valor1 = []
-valor2 = []
+valor2 = [] 
 valor3 =[]
 
 
