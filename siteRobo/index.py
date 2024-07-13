@@ -25,7 +25,8 @@ def mapa():
 
 @app.route('/start-car') 
 def startCar(): 
-    return start()
+    pass
+
 
 
 @app.route('/stop-car') 

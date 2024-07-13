@@ -4,7 +4,9 @@ import time
 
 porta = '/dev/ttyACM0'
 freq = 9600
-ser = funcao_sonar3.configurar_porta(porta, freq)
+def connect():
+    ser = funcao_sonar3.configurar_porta(porta, freq)
+    return ser
 
 lado = "meio"
 
@@ -85,6 +87,7 @@ def mid(): # Gira servo para o meio
 move_forward()
 mid()
 def start():
+    ser = connect()
     while True:
         valor = funcao_sonar3.sonar(ser)
         print("frente",valor[1])
@@ -104,3 +107,4 @@ def start():
             lt()
         elif lado != "meio":
             mid()
+start()
