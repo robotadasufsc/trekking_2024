@@ -15,7 +15,7 @@ IN1_PIN_A = 27  # Pino IN1 para o motor A
 IN2_PIN_A = 22  # Pino IN2 para o motor A
 LED_PIN = 14
 SERVO_PIN = 13
-adf
+
 
 def init():
     gpio.setmode(gpio.BCM)
@@ -98,13 +98,27 @@ def start():
             stop_motor()      
             time.sleep(3)
             desliga_led()
-            print("cabo")
+            print("cabô")
             break
-
+        # se o sensor detectar proximidade com a parede, irá virar para o lado oposto após 0.3 segundos, se sua distancia reduzir mais ainda
+        if valor[0] < 50:
+            i = time.time()
+            if i > 0.3 and valor[0] < 40:
+                lt()
+                time.sleep(0.5)
+                mid()
+        elif valor[2] < 50:
+            i = time.time()
+            if i > 0.3 and valor[2] < 40:
+                rt()
+                time.sleep(0.5)
+                mid()
+        
+        '''
         if 200 < valor[0] < 1000 and lado != "direita": 
             rt()
         elif valor[0] < 20 and lado != "esquerda":
             lt()
         elif lado != "meio":
-            mid()
+            mid()  '''
 start()
