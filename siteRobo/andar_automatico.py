@@ -15,7 +15,7 @@ IN1_PIN_A = 27  # Pino IN1 para o motor A
 IN2_PIN_A = 22  # Pino IN2 para o motor A
 LED_PIN = 14
 SERVO_PIN = 13
-
+adf
 
 def init():
     gpio.setmode(gpio.BCM)
