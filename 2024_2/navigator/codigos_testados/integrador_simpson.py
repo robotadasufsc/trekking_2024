@@ -66,12 +66,12 @@ def direction_servo(direction=0.105):
 
 # Defina a duração do loop em segundos
 
-frente = 2
-re = 2
+frente = 2 # tempo que vai pra frente
+re = 2 # tempo que vai pra trás
 duracao = 7  # por exemplo, 5 segundos
-Ts = 0.001
+Ts = 0.001 # tempo da amostragem
 
-# Obtenha o tempo de início
+# declaracao de variaveis 
 tempo_inicial = time.time()
 value_accel_x = []
 value_accel_y = []
@@ -86,6 +86,7 @@ velocita = [0]
 posita = [0]
 tempo = [0]
 
+# leitura dados dos sensores
 acceleration = navigator.read_accel()
 accel_x = acceleration.x
 accel_y = acceleration.y
@@ -98,8 +99,10 @@ giro_z = angular_velocity.z
 
 acceleration = navigator.read_accel()
 acy = acceleration.y
-offsety = calibracao.calibra_y(1000)
+offsety = calibracao.calibra_y(1000) # offset obtido através da calibração
 x = 0.105
+
+# loop que faz o carrinho andar pelo tempo determinado
 while time.time() - tempo_inicial < duracao:
     tempo.append(tempo[-1] + Ts)
     tempo_atual = time.time() - tempo_inicial
@@ -114,6 +117,7 @@ while time.time() - tempo_inicial < duracao:
     accel_y = calibracao.add_value(valor_filtro, acceleration.y, 400, 1, 20000) - offsety
     accel_z = acceleration.z
     value_accel_y.append(accel_y)
+
     # Integração para obter a velocidade usando a regra de Simpson
     if len(value_accel_y) > 1:
         new_velocita = simpson(value_accel_y, dx=Ts)
@@ -128,7 +132,7 @@ while time.time() - tempo_inicial < duracao:
         new_posita = 0
     posita.append(new_posita)
     
-    time.sleep(Ts)  # Adicione um atraso para simular uma operação dentro do loop
+    time.sleep(Ts)  # Adicione um atraso para simular uma operação dentro do loop, esse vai ser o tempo de amostragem dos dados
 stop_motor()
 #print(value_accel_y)
 print(f"O loop foi executado por {duracao} segundos taxa de amostragem {Ts}.")
@@ -145,62 +149,5 @@ plt.grid(True)
 
 
 #---------------------------
-"""
-def integrate_acceleration_to_velocity(acceleration, time_step):
-    velocity = [0]  # Começamos com velocidade inicial zero
-    for i in range(1, len(acceleration)):
-        # Usando a regra do trapézio para integração
-        delta_v = 0.5 * (acceleration[i-1] + acceleration[i]) * time_step
-        new_velocity = velocity[-1] + delta_v
-        velocity.append(new_velocity)
-    return velocity
 
-# Exemplo de uso
-acceleration = value_accel_y # Exemplo de valores de aceleração em m/s^2
-time_step = Ts  # Exemplo de intervalo de tempo em segundos entre as amostras
-
-velocity = integrate_acceleration_to_velocity(acceleration, time_step)
-
-#print("Valores de velocidade calculados:", velocity)
-plt.subplot(3, 1, 2)
-plt.plot(range(len(velocita)), velocita, label='m/s')
-plt.xlabel('Time')
-plt.ylabel('Values')
-plt.title('velocidade Y')
-plt.legend()
-plt.grid(True)
-plt.show()
-
-#--------------------
-
-def integrate_velocity_to_distance(velocity, time_step):
-    distance = [0]  # Começamos com distância inicial zero
-    for i in range(1, len(velocity)):
-        # Usando a regra do trapézio para integração
-        delta_d = 0.5 * (velocity[i-1] + velocity[i]) * time_step
-        new_distance = distance[-1] + delta_d
-        distance.append(new_distance)
-    return distance
-
-
-def calculate_final_position(acceleration, time_step):
-    velocity = integrate_acceleration_to_velocity(acceleration, time_step)
-    distance = integrate_velocity_to_distance(velocity, time_step)
-    final_position = sum(posita)
-    return final_position
-
-distance = integrate_acceleration_to_velocity(velocity, time_step)
-#print("Valores de velocidade calculados:", distance)
-t = np.arange(len(value_accel_y)) * Ts
-plt.subplot(3, 1, 3)
-plt.plot(range(len(posita)), posita, label='m')
-plt.xlabel('Time')
-plt.ylabel('Values')
-plt.title('distancia Y')
-plt.legend()
-plt.grid(True)
-plt.show()
-
-print(f'percorreu {sum(posita)} metros')
-"""
 plt.show()

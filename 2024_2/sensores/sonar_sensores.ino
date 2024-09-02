@@ -19,14 +19,9 @@ void loop() {
   distance1 = getDistance(trigPin1, echoPin1);
   distance2 = getDistance(trigPin2, echoPin2);
 
-  //Serial.print("Distance from sensor 1: ");
+  //Serial.print("distancia sensor 1: ");
   Serial.println(distance1);
-  //Serial.println(" cm");
-
-  //Serial.print("Distance from sensor 2: ");
   Serial.println(0);
-  //Serial.println(" cm");
-
   Serial.println(0);
   Serial.println(0);
   Serial.println(0);
@@ -45,7 +40,7 @@ long getDistance(int trigPin, int echoPin) {
   digitalWrite(trigPin, LOW);
   
   duration = pulseIn(echoPin, HIGH);
-  distance = (duration / 2) / 29.1; // Convert to centimeters
+  distance = (duration / 2) / 29.1; // converte para centimetros
   
   return distance;
 }

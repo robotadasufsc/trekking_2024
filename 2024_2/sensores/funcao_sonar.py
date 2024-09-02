@@ -2,11 +2,13 @@ import serial
 import time
 
 
+# funcao para fazer comunicacao serial entre arduino e raspberry
 def configurar_porta(porta, baudrate):
     ser = serial.Serial(porta, baudrate)
-    time.sleep(2)  # Aguarda 2 segundos para estabilizar a conexão
+    time.sleep(2)  # Aguarda 2 segundos para estabilizar a conexao
     return ser
 
+# funcao que recebe os valores dos 5 sensores arduino
 def sonar(ser):
     k = 0
     valores = [0, 0, 0, 0, 0]
@@ -20,9 +22,9 @@ def sonar(ser):
             if k == 5:
                 return valores
                 
-
+# funcao que organiza os dados de uma forma mais legivel na tela
 def dados(ser):
-    sensor = [[0 for _ in range(10)] for _ in range(5)] #inicializa com zeros
+    sensor = [[0 for _ in range(10)] for _ in range(5)] # inicializa com zeros
     for i in range(5):
         for k in range(10):
             valor = sonar(ser)
@@ -32,6 +34,8 @@ def dados(ser):
 
     return sensor
         
+
+# funcao que retira dados indesejados         
 def filtro(ser):
     x = 0
     valor = [[[0 for _ in range(10)] for _ in range(5)]]
@@ -54,6 +58,6 @@ def filtro(ser):
                 
         
         
-    return valor            
+          
 
 #ser.close()
