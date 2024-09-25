@@ -1,58 +1,38 @@
-import serial
+import RPi.GPIO as GPIO
 import time
 
+def setup_sensor(trigger_pin, echo_pin):
+    GPIO.setup(trigger_pin, GPIO.OUT)
+    GPIO.setup(echo_pin, GPIO.IN)
 
-def configurar_porta(porta, baudrate):
-    ser = serial.Serial(porta, baudrate)
-    time.sleep(2)  # Aguarda 2 segundos para estabilizar a conexão
-    return ser
+def medir_distancia(trigger_pin, echo_pin):
+    GPIO.output(trigger_pin, GPIO.LOW)
+    time.sleep(0.01)
 
-def sonar(ser):
-    k = 0
-    valores = [0, 0, 0, 0, 0]
-    while True:
-        if ser.in_waiting > 0:
-            k = k+1
-            line = ser.readline().decode('utf-8', errors='ignore').rstrip()
-            line = int(line)
-            valores[k-1] = line    
-            if k == 5:
-                return valores
-                
+    # Envia um pulso de 10µs no pino Trigger
+    GPIO.output(trigger_pin, GPIO.HIGH)
+    time.sleep(0.00001)
+    GPIO.output(trigger_pin, GPIO.LOW)
 
-def dados(ser):
-    sensor = [[0 for _ in range(10)] for _ in range(5)] #inicializa com zeros
-    for i in range(5):
-        for k in range(10):
-            valor = sonar(ser)
-            sensor[i][k] = valor[i]
-    print('---------------')
-            
+    # Espera pelo início do pulso de retorno no Echo
+    while GPIO.input(echo_pin) == GPIO.LOW:
+        pulso_inicial = time.time()
 
-    return sensor
-        
-def filtro(ser):
-    x = 0
-    valor = [[[0 for _ in range(10)] for _ in range(5)]]
-    valor4 = [[[0 for _ in range(10)] for _ in range(5)]]
-    while True:
-        valor2 = valor[x]
-        valor.append(dados(ser))
-        x = x+1
-        
-        valor3 = valor[x]
-        for i in range(5):
-            for k in range(10):
-                if valor3[i][k] == valor2[i][k]:
-                    valor4[i][k] = 'bateu'
-                    
+    # Captura o final do pulso de retorno no Echo
+    while GPIO.input(echo_pin) == GPIO.HIGH:
+        pulso_final = time.time()
 
-                elif valor3[i][k] != valor2[i][k]:
-                        valor4[i][k] = valor3[i][k]
-        return valor4
-                
-        
-        
-    return valor            
+    # Calcula a duração do pulso
+    duracao_pulso = pulso_final - pulso_inicial
 
-#ser.close()
+    # Calcula a distância em centímetros (velocidade do som: 34300 cm/s)
+    distancia = duracao_pulso * 34300 / 2
+
+    return distancia
+
+def coletar_distancias(sensores):
+    valores = []
+    for trigger_pin, echo_pin in sensores:
+        dist = medir_distancia(trigger_pin, echo_pin)
+        valores.append(dist)
+    return valores
