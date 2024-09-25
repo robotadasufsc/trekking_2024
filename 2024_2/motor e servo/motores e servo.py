@@ -2,7 +2,7 @@ import RPi.GPIO as gpio
 import time
 import pigpio
 
-gpio.cleanup()  # Limpa a configuracao de todos os pinos
+#gpio.cleanup()  # Limpa a configuracao de todos os pinos
 gpio.setwarnings(False)
 
 # Definir pinos dos motores
@@ -24,36 +24,39 @@ def setup():
     gpio.setup(LED_PIN, gpio.OUT)
 setup()
 
-# Inicializar pigpio para controle de servo
-#pi = pigpio.pi()
-#pi = pigpio.pi('localhost', 8888)
-pwm = gpio.PWM(PWM_PIN_A, 1)
+
 
 def liga_led():
     setup()
     gpio.output(LED_PIN, gpio.HIGH)
-    
+    time.sleep(3)
+   
 def desliga_led():
     setup()
     gpio.output(LED_PIN, gpio.LOW)
+    time.sleep(3)
 
 # FunÃ§Ãµes de controle dos motores
-def motor_forward(pin_pwm, pin_in1, pin_in2):
+def motor_forward(t): #inserir tempo
     gpio.cleanup()  # Limpa a configuracao de todos os pinos
     setup()
+   
     gpio.output(IN1_PIN_A, gpio.HIGH)
     gpio.output(IN2_PIN_A, gpio.LOW)
     pwm = gpio.PWM(PWM_PIN_A, 1)
     pwm.start(100)
+    time.sleep(t)
     return pwm
 
-def motor_backward(pin_pwm, pin_in1, pin_in2):
+def motor_backward(t): #inserir tempo
     gpio.cleanup()  # Limpa a configuracao de todos os pinos
     setup()
+   
     gpio.output(IN1_PIN_A, gpio.LOW)
     gpio.output(IN2_PIN_A, gpio.HIGH)
     pwm = gpio.PWM(PWM_PIN_A, 1)
     pwm.start(100)
+    time.sleep(t)
     return pwm
 
 def stop_motor(pwm):
@@ -61,18 +64,27 @@ def stop_motor(pwm):
     gpio.cleanup()  # Limpa a configuracao de todos os pinos
 
 #FunÃ§Ã£o para controlar o servo motor
-def set_servo_angle(duty):
-    gpio.cleanup()  # Limpa a configuracao de todos os pinos
-    gpio.setmode(gpio.BCM)
-    gpio.setup(SERVO_PIN, gpio.OUT)
+def set_servo_angle(duty): #duty deve ser definido entre os valores de 8 a 12
+    #gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    setup()
 
-    servo = gpio.PWM(13,50)
-    servo.start(0)   
-    servo.ChangeDutyCycle(duty)  
+    servo = gpio.PWM(SERVO_PIN,50) #Frequência do PWM no pino, 50hz
+    servo.start(duty)
+    time.sleep(1)
+    #servo.ChangeDutyCycle(duty)
+   
+liga_led()
+motor_forward(1)
 
 
+# liga_led()
+# set_servo_angle(10)
+# time.sleep(5)
+# print('servo')
+# desliga_led()
 
-except KeyboardInterrupt:
-    stop_motor(pwm)
-    gpio.cleanup()
-    pi.stop()
+
+# except KeyboardInterrupt:
+#     stop_motor(pwm)
+#     gpio.cleanup()
+#     pi.stop()
