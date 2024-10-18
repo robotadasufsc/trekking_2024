@@ -2,32 +2,27 @@ import RPi.GPIO as gpio
 import time
 import pigpio
 
-gpio.cleanup()  # Limpa a configuracao de todos os pinos
-gpio.setwarnings(False)
-
-# Definir pinos dos motores
-PWM_PIN_A = 12  # Pino PWM para o motor A
-IN1_PIN_A = 27  # Pino IN1 para o motor A
-IN2_PIN_A = 22  # Pino IN2 para o motor A
-LED_PIN = 14
-trigger_pin = 19
-echo_pin = 26
-
-# Definir pino do servo motor
-SERVO_PIN = 13  # Pino gpio para o servo motor
+IN1_PIN_A = 0
+IN2_PIN_A = 0
+SERVO_PIN = 0
+LED_PIN = 0
 
 # Inicializar gpio
+def setup_motor(IN1_PINA, IN2_PINA, SERVOPIN, LEDPIN):
+    global IN1_PIN_A, IN2_PIN_A, SERVO_PIN, LED_PIN
+    IN1_PIN_A = IN1_PINA
+    IN2_PIN_A = IN2_PINA
+    SERVO_PIN = SERVOPIN
+    LED_PIN = LEDPIN
+
+    
 def setup():
-    gpio.setmode(gpio.BCM)
-    gpio.setup(PWM_PIN_A, gpio.OUT)
+    #gpio.setup(PWM_PIN_A, gpio.OUT)
     gpio.setup(IN1_PIN_A, gpio.OUT)
     gpio.setup(IN2_PIN_A, gpio.OUT)
     gpio.setup(SERVO_PIN, gpio.OUT)
     gpio.setup(LED_PIN, gpio.OUT)
-    gpio.setup(trigger_pin, gpio.OUT)
-    gpio.setup(echo_pin, gpio.IN)
-setup()
-
+    
 
 
 def liga_led():
@@ -44,6 +39,7 @@ def motor_forward():
     setup()
     gpio.output(IN1_PIN_A, gpio.HIGH)
     gpio.output(IN2_PIN_A, gpio.LOW)
+    return {'result': 'sucess'}
     
 
 def motor_backward():
@@ -51,6 +47,7 @@ def motor_backward():
     setup()
     gpio.output(IN1_PIN_A, gpio.LOW)
     gpio.output(IN2_PIN_A, gpio.HIGH)
+    # FunÃ§Ãµes de controle dos motores
     
 
 def stop_motor():
@@ -58,15 +55,47 @@ def stop_motor():
     gpio.output(IN1_PIN_A, gpio.LOW)
     gpio.output(IN2_PIN_A, gpio.LOW)
     #gpio.cleanup()  # Limpa a configuracao de todos os pinos
+    return {'result': 'sucess'}
 
 #FunÃ§Ã£o para controlar o servo motor
 def set_servo_angle(duty):
+    # minimo de 8.5
+    #meio de 10.05
+    #maximo de 12
     #gpio.cleanup()  # Limpa a configuracao de todos os pinos
     setup()
+    
 
     servo = gpio.PWM(SERVO_PIN,50)
     servo.start(duty)   
-    time.sleep(1)
+    time.sleep(0.7)
 
-set_servo_angle(8)
-stop_motor()
+
+
+def servo_left():
+    set_servo_angle(9.3) #8.3
+    #time.sleep(0.5)
+
+def servo_right():
+    set_servo_angle(10.9) #11.8
+    #time.sleep(0.5)
+    
+def servo_mid():
+    set_servo_angle(10.05)
+    #time.sleep(0.5)
+
+
+
+
+'''
+liga_led()
+servo_right()
+time.sleep(1)
+servo_left()
+desliga_led()
+time.sleep(1)
+'''
+
+
+
+

@@ -1,14 +1,23 @@
 from flask import Flask
 from flask import render_template
-from funcao_sonar3 import sonar
-from andar_automatico import start
-from andar_automatico import stop_motor
-from carControl import move_forward
-from carControl import move_backward
-from carControl import move_left
-from carControl import move_right
+from maquina_estados import *
+
+'''para navegar até a pasta
+cd Documents
+cd trekking
+cd trekking_2024
+cd 2024_2
+cd siteRobo
+
+'''
+
 app = Flask(__name__)
-# pra testar flask --app index run --debug --host=0.0.0.0    
+
+# pra testar flask --app index run --host=0.0.0.0 sem debug mas site online
+# python index.py com debug mas sem acesso online
+
+if __name__ == "__main__":
+    app.run(debug=True)    
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -22,30 +31,30 @@ def power():
 @app.route('/mapa/')
 def mapa():
     return render_template('mapa.html')
-
 @app.route('/start-car') 
-def startCar(): 
-    pass
-
-
-
+def startCar():
+    return start()#motor_forward()
 @app.route('/stop-car') 
 def stopCar(): 
-    return stop_motor()
+    return stop()#stop_motor()
 
 @app.route('/move-left-car') 
-def moveLeftCar(): 
-    return move_left()
+def moveLeftCar():
+    pass 
+    
 
 @app.route('/move-right-car') 
-def moveRightCart():
-    return move_right()
+def moveRightCar():
+    pass
+    
 
 @app.route('/move-backward-car') 
-def moveBackward(): 
-    return move_backward()
+def moveBackward():
+    pass 
+    
 
 @app.route('/move-forward-car') 
-def moveForward(): 
-    return move_forward()
+def moveForward():
+    pass
+    
 
